@@ -72,7 +72,7 @@ static const struct spi_info spi_bus[] = {
 #endif
 #ifdef SPI3
     { SPI3, GPIO('C', 11), GPIO('C', 12), GPIO('C', 10), GPIO_FUNCTION(6) },
-    { SPI6, GPIO('B', 4), GPIO('B', 5), GPIO('B', 3), PINS_DIFFERENT_AF,
+    { SPI3, GPIO('B', 4), GPIO('B', 5), GPIO('B', 3), PINS_DIFFERENT_AF,
     GPIO_FUNCTION(6),GPIO_FUNCTION(7),GPIO_FUNCTION(6)},
 #endif
 #ifdef SPI4
