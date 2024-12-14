@@ -32,10 +32,10 @@ DECL_CONSTANT_STR("BUS_PINS_spi2a", "PC2,PC3,PB10");
 #endif
 
 #ifdef SPI3
+DECL_ENUMERATION("spi_bus", "spi3", __COUNTER__);
+DECL_CONSTANT_STR("BUS_PINS_spi3", "PB4,PB5,PB3");
 DECL_ENUMERATION("spi_bus", "spi3a", __COUNTER__);
 DECL_CONSTANT_STR("BUS_PINS_spi3a", "PC11,PC12,PC10");
-DECL_ENUMERATION("spi_bus", "spi3b", __COUNTER__);
-DECL_CONSTANT_STR("BUS_PINS_spi3b", "PB4,PB5,PB3");
 #endif
 
 #ifdef SPI4
