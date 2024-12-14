@@ -4,3 +4,4 @@ out
 .config
 .config.old
 klippy/.version
+.vscode/c_cpp_properties.json

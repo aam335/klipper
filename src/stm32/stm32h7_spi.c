@@ -10,9 +10,12 @@
 #include "internal.h" // gpio_peripheral
 #include "sched.h" // sched_shutdown
 
+#define PINS_DIFFERENT_AF 0
+
 struct spi_info {
     SPI_TypeDef *spi;
-    uint8_t miso_pin, mosi_pin, sck_pin, function;
+    uint8_t miso_pin, mosi_pin, sck_pin, function,
+        miso_af, mosi_af, sck_af;
 };
 
 DECL_ENUMERATION("spi_bus", "spi2", __COUNTER__);
@@ -31,6 +34,8 @@ DECL_CONSTANT_STR("BUS_PINS_spi2a", "PC2,PC3,PB10");
 #ifdef SPI3
 DECL_ENUMERATION("spi_bus", "spi3a", __COUNTER__);
 DECL_CONSTANT_STR("BUS_PINS_spi3a", "PC11,PC12,PC10");
+DECL_ENUMERATION("spi_bus", "spi3b", __COUNTER__);
+DECL_CONSTANT_STR("BUS_PINS_spi3b", "PB4,PB5,PB3");
 #endif
 
 #ifdef SPI4
@@ -67,6 +72,8 @@ static const struct spi_info spi_bus[] = {
 #endif
 #ifdef SPI3
     { SPI3, GPIO('C', 11), GPIO('C', 12), GPIO('C', 10), GPIO_FUNCTION(6) },
+    { SPI6, GPIO('B', 4), GPIO('B', 5), GPIO('B', 3), PINS_DIFFERENT_AF,
+    GPIO_FUNCTION(6),GPIO_FUNCTION(7),GPIO_FUNCTION(6)},
 #endif
 #ifdef SPI4
     { SPI4, GPIO('E', 13), GPIO('E', 14), GPIO('E', 12), GPIO_FUNCTION(5) },
@@ -92,9 +99,15 @@ spi_setup(uint32_t bus, uint8_t mode, uint32_t rate)
     SPI_TypeDef *spi = spi_bus[bus].spi;
     if (!is_enabled_pclock((uint32_t)spi)) {
         enable_pclock((uint32_t)spi);
+        if (spi_bus[bus].function!=PINS_DIFFERENT_AF){
         gpio_peripheral(spi_bus[bus].miso_pin, spi_bus[bus].function, 1);
         gpio_peripheral(spi_bus[bus].mosi_pin, spi_bus[bus].function, 0);
         gpio_peripheral(spi_bus[bus].sck_pin, spi_bus[bus].function, 0);
+        } else {
+        gpio_peripheral(spi_bus[bus].miso_pin, spi_bus[bus].miso_af, 1);
+        gpio_peripheral(spi_bus[bus].mosi_pin, spi_bus[bus].mosi_af, 0);
+        gpio_peripheral(spi_bus[bus].sck_pin, spi_bus[bus].sck_af, 0);
+        }
     }
 
     // Calculate CR1 register
